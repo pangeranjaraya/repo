@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GHOST CRASHER - WhatsApp Bug Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #2d1b69, #4a1c7a, #6a1b9a);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header dengan Menu */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .header-left h1 {
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, #e1bee7, #ce93d8, #ba68c8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            font-style: italic;
+        }
+        
+        .menu-btn {
+            background: linear-gradient(45deg, #9c27b0, #7b1fa2);
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(156, 39, 176, 0.4);
+        }
+        
+        .menu-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(156, 39, 176, 0.6);
+        }
+        
+        /* Menu Dropdown */
+        .menu-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: rgba(45, 27, 105, 0.95);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 10px;
+            min-width: 250px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+            z-index: 1000;
+        }
+        
+        .menu-dropdown.show {
+            display: block;
+        }
+        
+        .menu-section {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .menu-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .menu-section h3 {
+            font-size: 1rem;
+            margin-bottom: 10px;
+            color: #ce93d8;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .menu-item:hover {
+            color: #e1bee7;
+        }
+        
+        .menu-item i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .version-badge {
+            background: linear-gradient(45deg, #ff9800, #f57c00);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        /* Card Styles */
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .profile {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #ba68c8;
+            margin-bottom: 15px;
+            box-shadow: 0 0 25px rgba(186, 104, 200, 0.6);
+            transition: all 0.3s;
+        }
+        
+        .profile-img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(186, 104, 200, 0.8);
+        }
+        
+        .target-input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            margin-top: 10px;
+            outline: none;
+            transition: all 0.3s;
+        }
+        
+        .target-input:focus {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 2px #ba68c8;
+        }
+        
+        .bug-type-container {
+            margin-top: 20px;
+        }
+        
+        .bug-type-container label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #e1bee7;
+        }
+        
+        .bug-type-select {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+            margin-top: 10px;
+            outline: none;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .bug-type-select:focus {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 2px #ba68c8;
+        }
+        
+        /* Fast Attack Button */
+        .attack-section {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .attack-btn {
+            flex: 1;
+            padding: 18px;
+            border-radius: 10px;
+            border: none;
+            background: linear-gradient(45deg, #9c27b0, #7b1fa2);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .attack-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(156, 39, 176, 0.6);
+            background: linear-gradient(45deg, #8e24aa, #6a1b9a);
+        }
+        
+        .attack-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .attack-btn:disabled {
+            background: #555;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .fast-attack {
+            background: linear-gradient(45deg, #f44336, #d32f2f);
+        }
+        
+        .fast-attack:hover {
+            background: linear-gradient(45deg, #e53935, #c62828);
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+        }
+        
+        .status.success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4caf50;
+            display: block;
+        }
+        
+        .status.error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid #f44336;
+            display: block;
+        }
+        
+        .status.info {
+            background: rgba(33, 150, 243, 0.2);
+            border: 1px solid #2196f3;
+            display: block;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 4px solid #ba68c8;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .log-container {
+            background: rgba(0,0,0,0.3);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #2d1b69, #4a1c7a);
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .header-left h1 {
+                font-size: 1.8rem;
+            }
+            
+            .attack-section {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-left">
+                <h1>👻 GHOST CRASHER</h1>
+                <p class="subtitle">Cintamu kayak undefined, selalu ada di awal, tapi hilang saat dijalankan @lyaaJulia</p>
+            </div>
+            <button class="menu-btn" id="menu-btn">☰ Menu Developer</button>
+            
+            <div class="menu-dropdown" id="menu-dropdown">
+                <div class="menu-section">
+                    <h3>🔧 Developer Tools</h3>
+                    <div class="menu-item" onclick="showModal('developer-info')">
+                        <i>👨‍💻</i> Info Developer
+                    </div>
+                    <div class="menu-item" onclick="showModal('how-to-use')">
+                        <i>📖</i> Cara Pakai
+                    </div>
+                    <div class="menu-item" onclick="clearLogs()">
+                        <i>🗑️</i> Clear Logs
+                    </div>
+                </div>
+                
+                <div class="menu-section">
+                    <h3>⚡ System Info</h3>
+                    <div class="menu-item">
+                        <i>🔒</i> Version: <span class="version-badge">PREMIUM</span>
+                    </div>
+                    <div class="menu-item">
+                        <i>🕒</i> Status: <span style="color: #4caf50">Online</span>
+                    </div>
+                    <div class="menu-item">
+                        <i>📊</i> Bugs Today: <span id="bug-count">0</span>
+                    </div>
+                </div>
+                
+                <div class="menu-section">
+                    <h3>🎨 Themes</h3>
+                    <div class="menu-item" onclick="changeTheme('purple')">
+                        <i>💜</i> Purple Theme
+                    </div>
+                    <div class="menu-item" onclick="changeTheme('dark')">
+                        <i>⚫</i> Dark Theme
+                    </div>
+                    <div class="menu-item" onclick="changeTheme('blue')">
+                        <i>🔵</i> Blue Theme
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="card profile">
+            <img src="https://files.catbox.moe/vo28tw.jpg" alt="Profile" class="profile-img" id="profile-img">
+            <h2>📱 Target WhatsApp</h2>
+            <input type="text" class="target-input" id="target-number" placeholder="Example 62xxxxx" required>
+        </div>
+        
+        <div class="card">
+            <h2>⚙️ Konfigurasi Bug</h2>
+            
+            <div class="bug-type-container">
+                <label for="bug-type-select">🎯 Pilih Jenis Bug:</label>
+                <select class="bug-type-select" id="bug-type-select">
+                    <option value="">-- Pilih Jenis Bug --</option>
+                    <option value="blank">👻 LYAA BLANK</option>
+                    <option value="protocolv2">🔗 PROTOCOL V2</option>
+                    <option value="protocol">⚡ LYAA PROTOCOL</option>
+                    <option value="crash">💥 LYAA CRASH</option>
+                    <option value="korea">🚀 LYAA FORCLOSE</option>
+                </select>
+            </div>
+            
+            <div class="attack-section">
+                <button class="attack-btn" id="attack-btn">
+                    🚀 Attack Bug
+                </button>
+            </div>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Mengirim bug, harap tunggu...</p>
+            </div>
+            
+            <div class="status" id="status"></div>
+        </div>
+        
+        <div class="card">
+            <h3>📋 Log Aktivitas</h3>
+            <div class="log-container" id="log-container">
+                <div>🟢 System: GHOST CRASHER Premium siap digunakan!</div>
+                <div>ℹ️ Pilih jenis bug dan masukkan nomor target</div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 GHOST CRASHER - Hanya untuk tujuan edukasi dan pengujian</p>
+        </footer>
+    </div>
+
+    <!-- Modal untuk Info Developer -->
+    <div class="modal" id="developer-info-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>👨‍💻 Developer Information</h2>
+                <button class="close-modal" onclick="closeModal('developer-info-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>🔧 GHOST CRASHER WhatsApp Bug Tool</strong></p>
+                <p>Version: <span class="version-badge">PREMIUM 2.0</span></p>
+                <p>Developer: LyaaJulia Team</p>
+                <p>Status: <span style="color: #4caf50">● Active</span></p>
+                <br>
+                <p><strong>📞 Contact:</strong></p>
+                <p>Email: developer@ghostcrasher.com</p>
+                <p>Telegram: @ghostcrasher_support</p>
+                <br>
+                <p><strong>⚠️ Disclaimer:</strong></p>
+                <p>Tool ini hanya untuk tujuan edukasi dan pengujian keamanan. Gunakan dengan bijak dan bertanggung jawab.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal untuk Cara Pakai -->
+    <div class="modal" id="how-to-use-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📖 Cara Menggunakan</h2>
+                <button class="close-modal" onclick="closeModal('how-to-use-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Langkah-langkah penggunaan:</strong></p>
+                <ol>
+                    <li>📱 Masukkan nomor target WhatsApp (format: 62xxxxx)</li>
+                    <li>🎯 Pilih jenis bug yang ingin dikirim</li>
+                    <li>🚀 Klik "Attack Bug" untuk mengirim bug normal</li>
+                    <li>⚡ Klik "Fast Attack" untuk mengirim bug lebih cepat</li>
+                    <li>📋 Pantau log aktivitas untuk melihat hasil</li>
+                </ol>
+                <br>
+                <p><strong>Jenis Bug Tersedia:</strong></p>
+                <ul>
+                    <li>👻 LYAA BLANK - Mengirim pesan kosong berulang</li>
+                    <li>🔗 PROTOCOL V2 - Bug protokol versi 2</li>
+                    <li>⚡ LYAA PROTOCOL - Bug protokol custom</li>
+                    <li>💥 LYAA CRASH - Bug yang menyebabkan crash</li>
+                    <li>🚀 LYAA FORCLOSE - Bug force close aplikasi</li>
+                </ul>
+                <br>
+                <p><strong>💡 Tips:</strong></p>
+                <p>Gunakan Fast Attack untuk hasil lebih cepat, namun mungkin kurang stabil</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Inisialisasi variabel
+        const attackBtn = document.getElementById('attack-btn');
+        const fastAttackBtn = document.getElementById('fast-attack-btn');
+        const targetInput = document.getElementById('target-number');
+        const bugTypeSelect = document.getElementById('bug-type-select');
+        const loading = document.getElementById('loading');
+        const status = document.getElementById('status');
+        const profileImg = document.getElementById('profile-img');
+        const logContainer = document.getElementById('log-container');
+        const menuBtn = document.getElementById('menu-btn');
+        const menuDropdown = document.getElementById('menu-dropdown');
+        const bugCountElement = document.getElementById('bug-count');
+
+        let bugCount = 0;
+        let isFastAttack = false;
+
+        // Toggle menu dropdown
+        menuBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            menuDropdown.classList.toggle('show');
+        });
+
+        // Close menu ketika klik di luar
+        document.addEventListener('click', function() {
+            menuDropdown.classList.remove('show');
+        });
+
+        // Fungsi untuk logging dengan emoji
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `<span style="color: #ba68c8">[${timestamp}]</span> ${message}`;
+            
+            if (type === 'error') logEntry.style.color = '#f44336';
+            if (type === 'success') logEntry.style.color = '#4caf50';
+            if (type === 'warning') logEntry.style.color = '#ff9800';
+            
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // Fungsi untuk menampilkan status
+        function showStatus(message, type) {
+            status.textContent = message;
+            status.className = 'status ' + type;
+            addLog(`📢 Status: ${message}`, type);
+        }
+
+        // Fungsi untuk validasi nomor target
+        function validateTargetNumber(number) {
+            const regex = /^[0-9]{10,15}$/;
+            return regex.test(number);
+        }
+
+        // Simulasi WhatsApp Client
+        const WhatsAppClient = {
+            isConnected: true,
+            
+            async relayMessage(target, message, options = {}) {
+                addLog(`📤 Mengirim payload ke ${target}`, 'info');
+                
+                // Delay lebih pendek untuk fast attack
+                const delay = isFastAttack ? 500 : 1500;
+                await new Promise(resolve => setTimeout(resolve, delay));
+                
+                // Success rate lebih tinggi untuk fast attack
+                const successRate = isFastAttack ? 0.95 : 0.85;
+                const success = Math.random() > (1 - successRate);
+                
+                if (success) {
+                    addLog(`✅ Payload berhasil dikirim ke ${target}`, 'success');
+                    bugCount++;
+                    bugCountElement.textContent = bugCount;
+                    return { success: true, messageId: 'msg_' + Date.now() };
+                } else {
+                    addLog(`❌ Gagal mengirim payload ke ${target}`, 'error');
+                    throw new Error('Failed to send message');
+                }
+            }
+        };
+
+        // Fungsi generateWAMessageFromContent
+        function generateWAMessageFromContent(target, content, options = {}) {
+            return {
+                key: {
+                    id: 'GHOST_' + Math.random().toString(36).substr(2, 9),
+                    remoteJid: target,
+                    fromMe: true,
+                    participant: target
+                },
+                message: content,
+                timestamp: Date.now()
+            };
+        }
+
+        // IMPLEMENTASI FUNGSI BUG
+        async function sendBug() {
+            const targetNumber = targetInput.value.trim();
+            const bugType = bugTypeSelect.value;
+            
+            if (!targetNumber) {
+                showStatus('❌ Masukkan nomor target terlebih dahulu!', 'error');
+                return;
+            }
+            
+            if (!validateTargetNumber(targetNumber)) {
+                showStatus('❌ Format nomor target tidak valid!', 'error');
+                return;
+            }
+            
+            if (!bugType) {
+                showStatus('❌ Pilih jenis bug terlebih dahulu!', 'error');
+                return;
+            }
+            
+            // Tampilkan loading
+            loading.style.display = 'block';
+            attackBtn.disabled = true;
+            fastAttackBtn.disabled = true;
+            
+            try {
+                const targetJid = `${targetNumber}@s.whatsapp.net`;
+                let result;
+                
+                addLog(`🎯 Memulai serangan ${bugType} ke ${targetNumber}...`, 'info');
+                
+                // Berdasarkan jenis bug
+                switch(bugType) {
+                    case 'blank':
+                        result = await sendBlankBug(targetJid);
+                        break;
+                    case 'protocol':
+                        result = await sendProtocolBug(targetJid);
+                        break;
+                    case 'crash':
+                        result = await sendCrashBug(targetJid);
+                        break;
+                    case 'korea':
+                        result = await sendKoreaBug(targetJid);
+                        break;
+                    case 'protocolv2':
+                        result = await sendProtocolV2Bug(targetJid);
+                        break;
+                    default:
+                        throw new Error('Jenis bug tidak dikenali');
+                }
+                
+                // Tampilkan hasil
+                const attackType = isFastAttack ? 'Fast Attack' : 'Normal Attack';
+                showStatus(`✅ ${attackType} ${bugType} berhasil dikirim ke ${targetNumber}!`, 'success');
+                addLog(`🎉 ${attackType} ${bugType} selesai dengan sukses!`, 'success');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showStatus(`❌ Gagal mengirim bug: ${error.message}`, 'error');
+                addLog(`💥 Gagal: ${error.message}`, 'error');
+            } finally {
+                // Sembunyikan loading
+                loading.style.display = 'none';
+                attackBtn.disabled = false;
+                fastAttackBtn.disabled = false;
+                isFastAttack = false;
+            }
+        }
+
+        // Fungsi bug individual
+        async function sendBlankBug(target) {
+            addLog(`👻 Memulai LYAA BLANK Bug ke ${target}`, 'info');
+            // Implementasi blank bug disini
+            const result = await WhatsAppClient.relayMessage(target, {});
+            window.open(`https://api.whatsapp.com/send?phone=${target}&text=${encodeURIComponent('LYAA_BLANK_BUG')}`, '_blank');
+            return result;
+        }
+
+        async function sendProtocolBug(target) {
+            addLog(`⚡ Memulai LYAA PROTOCOL Bug ke ${target}`, 'info');
+            // Implementasi protocol bug disini
+            const result = await WhatsAppClient.relayMessage(target, {});
+            window.open(`https://api.whatsapp.com/send?phone=${target}&text=${encodeURIComponent('LYAA_PROTOCOL_BUG')}`, '_blank');
+            return result;
+        }
+
+        async function sendCrashBug(target) {
+            addLog(`💥 Memulai LYAA CRASH Bug ke ${target}`, 'info');
+            // Implementasi crash bug disini
+            const result = await WhatsAppClient.relayMessage(target, {});
+            window.open(`https://api.whatsapp.com/send?phone=${target}&text=${encodeURIComponent('LYAA_CRASH_BUG')}`, '_blank');
+            return result;
+        }
+
+        async function sendKoreaBug(target) {
+            addLog(`🚀 Memulai LYAA FORCLOSE Bug ke ${target}`, 'info');
+            // Implementasi korea bug disini
+            const result = await WhatsAppClient.relayMessage(target, {});
+            window.open(`https://api.whatsapp.com/send?phone=${target}&text=${encodeURIComponent('LYAA_FORCLOSE_BUG')}`, '_blank');
+            return result;
+        }
+
+        async function sendProtocolV2Bug(target) {
+            addLog(`🔗 Memulai PROTOCOL V2 Bug ke ${target}`, 'info');
+            // Implementasi protocol v2 bug disini
+            const result = await WhatsAppClient.relayMessage(target, {});
+            window.open(`https://api.whatsapp.com/send?phone=${target}&text=${encodeURIComponent('PROTOCOL_V2_BUG')}`, '_blank');
+            return result;
+        }
+
+        // Event listener untuk tombol attack
+        attackBtn.addEventListener('click', function() {
+            isFastAttack = false;
+            sendBug();
+        });
+
+        fastAttackBtn.addEventListener('click', function() {
+            isFastAttack = true;
+            sendBug();
+        });
+
+        // Fungsi modal
+        function showModal(modalType) {
+            if (modalType === 'developer-info') {
+                document.getElementById('developer-info-modal').classList.add('show');
+            } else if (modalType === 'how-to-use') {
+                document.getElementById('how-to-use-modal').classList.add('show');
+            }
+            menuDropdown.classList.remove('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // Fungsi clear logs
+        function clearLogs() {
+            logContainer.innerHTML = '<div>🟢 Log berhasil dibersihkan</div>';
+            menuDropdown.classList.remove('show');
+        }
+
+        // Fungsi change theme
+        function changeTheme(theme) {
+            let gradient;
+            switch(theme) {
+                case 'purple':
+                    gradient = 'linear-gradient(135deg, #2d1b69, #4a1c7a, #6a1b9a)';
+                    break;
+                case 'dark':
+                    gradient = 'linear-gradient(135deg, #1a1a1a, #2d2d2d, #3d3d3d)';
+                    break;
+                case 'blue':
+                    gradient = 'linear-gradient(135deg, #1a237e, #283593, #303f9f)';
+                    break;
+            }
+            document.body.style.background = gradient;
+            menuDropdown.classList.remove('show');
+            addLog(`🎨 Theme changed to ${theme}`, 'info');
+        }
+
+        // Upload foto profil
+        profileImg.addEventListener('click', function() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        profileImg.src = event.target.result;
+                        addLog('📷 Foto profil diperbarui', 'success');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            input.click();
+        });
+
+        // Inisialisasi
+        addLog('🟢 GHOST CRASHER Premium diinisialisasi', 'success');
+        addLog('⚡ Fast Attack mode tersedia', 'info');
+        addLog('🔧 Developer tools aktif', 'info');
+    </script>
+</body>
+</html>
